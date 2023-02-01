@@ -17,6 +17,20 @@ public class Player : MonoBehaviour
     [SerializeField] bool can_jump = false;
     [Range(0, 1)][SerializeField] float smooth_time = 0.5f;
 
+    private Vector3 mousePosition;
+    Vector2 playerPosition;
+    [SerializeField] LayerMask Hookable;
+
+    Vector2 endHook;
+
+    RaycastHit2D hit;
+
+    float distance_Grap;
+
+    [SerializeField]  bool can_grap;
+    [SerializeField]  bool touching;
+    [SerializeField]  int count;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +41,46 @@ public class Player : MonoBehaviour
         //Debug.Log(Mathf.Lerp(current, target, 0));
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        touching = true;
+        can_grap = true;
+        count = 0;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        touching = false;
+    }
+
+    private void Moving()
+    {
+        can_grap = false;
+        while (touching == false || count < 1)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, endHook, 0.5f);
+            count++;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+
+        playerPosition = transform.position;
+        
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        hit = Physics2D.Raycast(playerPosition, mousePosition, 40f, Hookable);
+
+        Debug.DrawRay(playerPosition, mousePosition, Color.green);
+
+        if (Input.GetKey(KeyCode.F) && hit.collider != null && can_grap)
+        {
+            Moving();
+            Debug.Log("Beh");
+        }
+
         horizontal_value = Input.GetAxis("Horizontal");
 
         if(horizontal_value > 0) sr.flipX = false;
