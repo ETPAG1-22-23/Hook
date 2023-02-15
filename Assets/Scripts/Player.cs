@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
     private void Moving()
     {
         can_grap = false;
-        while (touching == false || count < 1)
+        while (touching == false || count < 10)
         {
             transform.position = Vector2.MoveTowards(transform.position, endHook, 0.5f);
             count++;
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
 
         hit = Physics2D.Raycast(playerPosition, mousePosition, 40f, Hookable);
 
-        Debug.DrawRay(playerPosition, mousePosition, Color.green);
+        //Debug.DrawRay(playerPosition, mousePosition, Color.green);
 
         if (Input.GetKey(KeyCode.F) && hit.collider != null && can_grap)
         {

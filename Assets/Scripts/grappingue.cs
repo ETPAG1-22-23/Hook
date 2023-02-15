@@ -44,9 +44,12 @@ public class grappingue : MonoBehaviour
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-        hit = Physics2D.Raycast(playerPosition, mousePosition, 40f, Hookable);
+        Vector2 direction = (((Vector2)mousePosition - playerPosition));
+        Debug.Log(mousePosition);
 
-        Debug.DrawRay(playerPosition, mousePosition, Color.green);
+        hit = Physics2D.Raycast(playerPosition, direction, 40f, Hookable);
+
+        Debug.DrawRay(playerPosition, direction, Color.green);
 
         if (Input.GetKey(KeyCode.F) && hit.collider != null && can_grap)
         {
